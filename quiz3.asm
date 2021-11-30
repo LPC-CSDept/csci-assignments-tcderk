@@ -21,8 +21,25 @@ main:
     li  $v0, 6
     syscall
 
-    li.s    $f1, 1.0        # Current approximation, x = 1.0
-    li.s    $f2, 1.0        # Next approximation x'
-    li.s    $f3, 2.0        # Constant
+    mov.s   $f1, $f0
+    li.s    $f2, 1.0        # Current approximation, x = 1.0
+    li.s    $f3, 1.0        # Next approximation x'
+    li.s    $f4, 2.0        # Constant
+    li.s    $f10, 1.0e-5    # Precision limit
 
     # Calculate approximation
+loop:
+    div.s   $f5, $f1, $f2   # n / x
+    add.s   $f3, $f2, $f5   # x + (n / x)
+    div.s   $f3, $f3, $f4   # (x + (n / x)) / 2.0
+
+    # Check precision
+    sub.s   $f6, $f3, $f2   # x' - x
+    abs.s   $f6, $f6        # |x' - x|
+    c.lt.s  $f6, $f10       # if $f6 < $f10
+    bc1t    end             # then break loop
+    nop
+    mov.s   $f2, $f3        # current = next
+    j       loop            # else loop
+    nop
+
