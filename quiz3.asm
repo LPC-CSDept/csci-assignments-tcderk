@@ -43,3 +43,14 @@ loop:
     j       loop            # else loop
     nop
 
+    # Print result
+end:
+    la  $a0, prompt2
+    li  $v0, 4
+    syscall
+    mov.s   $f12, $f3
+    li  $v0, 2
+    syscall
+
+    li  $v0, 10
+    syscall
