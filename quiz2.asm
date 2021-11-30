@@ -45,3 +45,18 @@ main:
     syscall
     mov.s   $f4, $f0
     
+    # Calculate ax^2 + bx + c
+    mov.s   $f5, $f1            # Save a copy of x
+    mul.s   $f1, $f1, $f1       # x^2
+    mul.s   $f1, $f1, $f2       # ax^2
+    mul.s   $f3, $f3, $f5       # bx
+    add.s   $f1, $f1, $f3       # ax^2 + bx
+    add.s   $f1, $f1, $f4       # ax^2 + bx + c
+
+    # Print result
+    mov.s   $f12, $f1
+    li      $v0, 2          # Print float service
+    syscall
+
+    li      $v0, 10
+    syscall
