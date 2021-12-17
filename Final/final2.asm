@@ -7,8 +7,8 @@
 #
 
     .kdata
-s1: .word   10
-s2: .word   11
+s1:     .word   10
+s2:     .word   11
 
     .text
     .globl main
@@ -32,6 +32,14 @@ loop:
     srl         $a0, $k0, 2         # Read exception code
     andi        $a0, $a0, 0x1f      # Only need exception code (5 bits)
     bne         $a0, $zero, kdone   # Only handle I/O
+    nop
+    li          $v0, 0xFFFF0000     # Constant. Address of receiver control
+    lw          $a0, 4($v0)         # Read receiver data
+    li          $a1, 113            # ASCII code 'q'
+    bne         $a0, $a1, kdone     # Exit kernel text if char != 'q'
+    nop
+    li          $v0, 10             # Exit program
+    syscall
 
 kdone:
     lw          $v0, s1
