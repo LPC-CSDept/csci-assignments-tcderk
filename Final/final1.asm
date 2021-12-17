@@ -21,18 +21,14 @@ loop:
     blez    $t0, loop               # Loop if not ready
     nop
     lw      $t1, 4($s1)             # Read receiver data
-
-    li      $v0, 1                  # Print integer
-    or      $a0, $t1, $zero         # Copy result into $a0
-    syscall
-
+    addi    $t1, $t1, -48           # Account for ASCII
     mul     $s2, $s2, $s0           # Shift result one decimal left
     add     $s2, $s2, $t1           # Add result decimal to ones place of result
     addi    $s3, $s3, -1            # Decrement counter
     bgtz    $s3, loop               # Terminate loop after 3 iterations
 
-    li      $v0, 1                  # Print integer
     or      $a0, $s2, $zero         # Copy result into $a0
+    li      $v0, 1                  # Print integer
     syscall
     li      $v0, 10
     syscall
