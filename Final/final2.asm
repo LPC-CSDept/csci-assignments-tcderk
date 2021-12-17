@@ -31,4 +31,14 @@ loop:
     mfc0        $k0, $13            # Read cause register
     srl         $a0, $k0, 2         # Read exception code
     andi        $a0, $a0, 0x1f      # Only need exception code (5 bits)
-    
+    bne         $a0, $zero, kdone   # Only handle I/O
+
+kdone:
+    lw          $v0, s1
+    lw          $a0, s2             # Restore registers
+    mtc0        $zero, $13          # Clear cause register
+    mfc0        $k0, $12            # Read from status register
+    andi        $k0, $k0, 0xfffd    # Clear exception level bit (bit 1)
+    ori         $k0, $k0, 0xff11    # Enable all interrupts
+    mtc0        $k0, $12            # Write back to status register
+    eret
