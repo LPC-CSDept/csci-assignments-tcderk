@@ -7,8 +7,9 @@
 #
 
     .kdata
-s1:     .word   10
-s2:     .word   11
+s1:         .word   10
+s2:         .word   11
+new_line:   .asciiz "\n"
 
     .text
     .globl main
@@ -22,14 +23,6 @@ main:
     sw          $a0, 0($s0)         # Write to receiver control
 
 loop:
-    lw          $t0, 0($s0)         # Read receiver control
-    andi        $t0, $t0, 1         # Check ready bit
-    blez        $t0, loop           # Loop if not ready
-    nop
-    lw          $t1, 4($s0)         # Read receiver data
-    or          $a0, $t1, $zero
-    li          $v0, 11
-    syscall                         # Echo print char
     j           loop                # Loop
 
     li          $v0, 10
@@ -47,8 +40,17 @@ loop:
     li          $v0, 0xFFFF0000     # Constant. Address of receiver control
     lw          $a0, 4($v0)         # Read receiver data
     li          $a1, 113            # ASCII code 'q'
-    bne         $a0, $a1, kdone     # Exit kernel text if char != 'q'
+    beq         $a0, $a1, qfound    # Quit if char = 'q'
     nop
+    li          $v0, 11             # Else print char
+    syscall
+    li          $v0, 4              # Print new line
+    la          $a0, new_line
+    syscall
+    j           kdone
+    nop
+
+qfound:
     li          $v0, 10             # Exit program
     syscall
 
