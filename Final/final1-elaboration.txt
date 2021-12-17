@@ -1,0 +1,22 @@
+Note: Program results were submitted to Canvas.
+Final1 Elaboration
+This program will take in 3 digits from the user through MMI/O, then print the 3-digit decimal using syscall.
+I will need to write this program in 3 sections: inputting digits, calculating the 3-digit decimal, and printing and terminating the program. 
+The user will be inputting 3 digits, and I can do the calculation each time a digit is inputted. This inputting and calculating section can be within a loop which terminates after 3 iterations.
+
+Inputting: (Within loop)
+Check receiver control ready bit (least significant bit) for a ‘1’.
+lw from the receiver data if ‘1’.
+Go back to step 1. If ‘0’.
+
+Calculation: (Within loop, after inputting)
+Begin with result = 0.
+Multiply result by 10 to shift the digits up one tens place.
+Subtract 48 from input to convert ASCII to decimal.
+Add the input to the result.
+When the next input is ready, repeat from step 2.
+
+Printing: (After loop)
+Put result in $a0.
+Print result using syscall code 1.
+Exit program using syscall code 10.
