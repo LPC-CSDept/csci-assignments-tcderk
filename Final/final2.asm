@@ -22,7 +22,18 @@ main:
     sw          $a0, 0($s0)         # Write to receiver control
 
 loop:
-    j           loop                # Infinite loop
+    lw          $t0, 0($s0)         # Read receiver control
+    andi        $t0, $t0, 1         # Check ready bit
+    blez        $t0, loop           # Loop if not ready
+    nop
+    lw          $t1, 4($s0)         # Read receiver data
+    or          $a0, $t1, $zero
+    li          $v0, 11
+    syscall                         # Echo print char
+    j           loop                # Loop
+
+    li          $v0, 10
+    syscall                         # Program should never reach this
 
     .ktext  0x80000180              # Beginnning of kernel text
     sw          $v0, s1
