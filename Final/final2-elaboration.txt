@@ -1,0 +1,13 @@
+Note: Program results were submitted to Canvas
+Final2 Elaboration
+This program will continually read and print the user’s input until ‘q’ is entered.
+
+In the exception handler, receiver control doesn’t need to be checked because we are handling I/O in the first place.
+
+If the read character is ‘q’, the program will immediately quit (syscall code 10).
+
+Otherwise, echo print the read char back to the user.
+Then, return to the program.
+
+Since this is contained in the kernel text, the main program can simply be an infinite loop.
+But before the loop, we need to enable all interrupts.
